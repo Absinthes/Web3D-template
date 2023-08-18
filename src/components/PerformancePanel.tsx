@@ -62,11 +62,11 @@ export function PerformancePlane() {
     });
 
     const controls = c as OrbitControls;
-    const controlsTarget = controls.position0;
+    const controlsTarget = controls.target;
 
     setControlsInfo({
-      position: [controlsTarget.x, controlsTarget.y, controlsTarget.z],
-      target: [
+      target: [controlsTarget.x, controlsTarget.y, controlsTarget.z],
+      position: [
         controls.position0.x,
         controls.position0.y,
         controls.position0.z,

@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls, Stats } from "@react-three/drei";
-import { PerformancePlane } from "@/components/PerformancePlane";
+import { PerformancePlane } from "@/components/PerformancePanel";
 import { Leva } from "leva";
 
 export default function Index() {
