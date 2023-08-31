@@ -1,18 +1,25 @@
 import { Canvas } from "@react-three/fiber";
-import { Environment, OrbitControls, Stats } from "@react-three/drei";
+import { Environment, Loader, Stats } from "@react-three/drei";
 import { PerformancePlane } from "@/components/PerformancePanel";
 import { Leva } from "leva";
+import Controls from "./Controls";
+import Camera from "./Camera";
+import { Suspense } from "react";
 
 export default function Index() {
   return (
     <>
       <Canvas>
         <Help />
+        <Controls />
+        <Camera />
         <Environment preset="sunset" />
         <color attach="background" args={["#c3c3cc"]} />
-        <OrbitControls makeDefault />
-        <Scene />
+        <Suspense>
+          <Scene />
+        </Suspense>
       </Canvas>
+      <Loader />
     </>
   );
 }
