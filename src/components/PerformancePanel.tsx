@@ -1,8 +1,16 @@
-import { useFrame } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { useControls } from "leva";
+import { useEffect } from "react";
+import { PerspectiveCamera } from "three";
 import { OrbitControls } from "three-stdlib";
 
-export function PerformancePlane() {
+export function PerformancePanel() {
+  const { gl, camera, controls } = useThree((state) => ({
+    gl: state.gl,
+    camera: state.camera as PerspectiveCamera,
+    controls: state.controls as OrbitControls,
+  }));
+
   const [_, setPerformance] = useControls(
     "Performance",
     () => {
@@ -24,6 +32,10 @@ export function PerformancePlane() {
     () => {
       return {
         position: [0, 0, 0],
+        rotation: [0, 0, 0],
+        fov: 0,
+        near: 0,
+        far: 0,
       };
     },
     { collapsed: true, order: -1 }
@@ -42,7 +54,7 @@ export function PerformancePlane() {
     { collapsed: true, order: -1 }
   );
 
-  useFrame(({ gl, camera, controls: c }) => {
+  function updateParams() {
     const {
       memory: { geometries, textures },
       render: { frame, calls, triangles, points, lines },
@@ -59,9 +71,14 @@ export function PerformancePlane() {
 
     setCameraInfo({
       position: [camera.position.x, camera.position.y, camera.position.z],
+      rotation: [camera.rotation.x, camera.rotation.y, camera.rotation.z],
+      fov: camera.fov,
+      near: camera.near,
+      far: camera.far,
     });
 
-    const controls = c as OrbitControls;
+    if (!controls) return;
+
     const controlsTarget = controls.target;
 
     setControlsInfo({
@@ -74,6 +91,14 @@ export function PerformancePlane() {
       polarAngle: controls.getPolarAngle(),
       azimuthalAngle: controls.getAzimuthalAngle(),
     });
-  });
+  }
+
+  useEffect(() => {
+    controls?.addEventListener("end", updateParams);
+    return () => {
+      controls?.removeEventListener("end", updateParams);
+    };
+  }, [controls]);
+
   return <></>;
 }

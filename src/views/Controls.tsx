@@ -1,11 +1,11 @@
 import { OrbitControls } from "@react-three/drei";
-import { createRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 export let globalOrbitControls: OrbitControlsImpl;
 
 export default function Controls() {
-  const orbitControlsRef = createRef<OrbitControlsImpl>();
+  const orbitControlsRef = useRef<OrbitControlsImpl>(null);
 
   useEffect(() => {
     globalOrbitControls = orbitControlsRef.current!;
@@ -13,9 +13,7 @@ export default function Controls() {
 
   return (
     <>
-      <OrbitControls
-        ref={orbitControlsRef}
-      />
+      <OrbitControls ref={orbitControlsRef} />
     </>
   );
 }
